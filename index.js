@@ -69,6 +69,5 @@ require('./topics')(bot)
 
 // catch all handler
 bot.command(function (msg, reply, next) {
-    reply.text('Invalid command.')
-    next()
+    reply.text("Invalid command.");
 })

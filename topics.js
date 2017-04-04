@@ -23,7 +23,7 @@ module.exports = function (bot) {
     })
 
     bot.command('del', function (msg, reply, next) {
-        if (!msg.context.admin && !msg.context.test) next()
+        if (!msg.context.admin && !msg.context.test) return next()
 
         let args = msg.args(2)
         let topic = args[0]
@@ -40,7 +40,7 @@ module.exports = function (bot) {
 
 
     bot.command('sub', function (msg, reply, next) {
-        if (!msg.context.admin && !msg.context.user && !msg.context.test) next()
+        if (!msg.context.admin && !msg.context.user && !msg.context.test) return next()
 
         let args = msg.args(2)
         let topic = args[0]
@@ -60,7 +60,7 @@ module.exports = function (bot) {
     })
 
     bot.command('unsub', function (msg, reply, next) {
-        if (!msg.context.admin && !msg.context.user && !msg.context.test) next()
+        if (!msg.context.admin && !msg.context.user && !msg.context.test) return next()
 
         let args = msg.args(2)
         let topic = args[0]
@@ -80,7 +80,7 @@ module.exports = function (bot) {
     })
 
     bot.command('show', function (msg, reply, next) {
-        if (!msg.context.admin && !msg.context.user && !msg.context.test) next()
+        if (!msg.context.admin && !msg.context.user && !msg.context.test) return next()
 
         let args = msg.args(2)
         let topic = args[0]
