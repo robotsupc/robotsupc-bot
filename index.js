@@ -90,7 +90,7 @@ bot.command('pong', function(msg, reply, next) {
 bot.command('say', function(msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) return next()
 
-    bot.reply(config.test_chat).text(msg.args())
+    bot.reply(config.user_chat).text(msg.args())
 })
 
 
