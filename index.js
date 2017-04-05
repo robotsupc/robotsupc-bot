@@ -59,7 +59,8 @@ bot.command('quit', function (msg, reply, next) {
     save();
 
     setTimeout(function () {
-        process.exit(-10)
+        console.log("Quitting bot on admin's request")
+        process.exit(0)
     }, 3000)
 })
 
