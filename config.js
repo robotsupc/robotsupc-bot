@@ -4,6 +4,7 @@ module.exports = {
     // For privileges
     admin_users: [
         205023012, // Twinone
+        290339201,
     ],
     user_users: [],
     test_users: [],
