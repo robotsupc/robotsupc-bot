@@ -87,6 +87,12 @@ bot.command('pong', function(msg, reply, next) {
     }
 })
 
+bot.command('say', function(msg, reply, next) {
+    if (!msg.context.admin && !msg.context.test) return next()
+
+    bot.reply(config.test_chat).text(msg.args())
+})
+
 
 // catch all handler, only works when directly mentioned
 bot.command(function (msg, reply, next) {
@@ -112,5 +118,5 @@ process.on('SIGINT', function() {
 const head = shell.exec('git rev-parse master', {silent:true}).stdout.trim().substr(0, 7);
 
 const msg = "Bot online. Last commit: " + head;
-//bot.reply(config.test_chat).text(msg)
-bot.reply(config.admin_chat).text(msg)
+bot.reply(config.test_chat).text(msg)
+//bot.reply(config.admin_chat).text(msg)
