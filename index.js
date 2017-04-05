@@ -52,17 +52,24 @@ bot.all(function (msg, reply, next) {
 
 
 bot.command('quit', function (msg, reply, next) {
-    if (!msg.context.admin) next()
+    if (!msg.context.admin) return next()
 
     reply.text('Quitting bot in 3 seconds')
 
-    fs.writeFileSync(filename, JSON.stringify(bot.store))
+    save();
 
     setTimeout(function () {
         process.exit(-10)
     }, 3000)
 })
 
+
+
+bot.command('save', function(msg, reply, next) {
+    if (!msg.context.admin) return next()
+    save()
+    reply.text("Saved!")
+})
 
 require('./topics')(bot)
 
@@ -71,3 +78,16 @@ require('./topics')(bot)
 bot.command(function (msg, reply, next) {
     reply.text("Invalid command.");
 })
+
+
+
+function save() {
+    fs.writeFileSync(filename, JSON.stringify(bot.store))
+}
+
+process.on('SIGINT', function() {
+    console.log("Caught interrupt signal... saving");
+    save();
+    console.log("Saved. Bye.")
+    process.exit();
+});
