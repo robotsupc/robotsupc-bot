@@ -104,5 +104,5 @@ process.on('SIGINT', function() {
     console.log("Caught interrupt signal... saving");
     save();
     console.log("Saved. Bye.")
-    process.exit();
+    process.exit(0);
 });
