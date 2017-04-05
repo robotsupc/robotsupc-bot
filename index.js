@@ -82,6 +82,14 @@ bot.command('ping', function(msg, reply, next) {
     reply.text("pong")
 })
 
+bot.command('id', function (msg, reply, next) {
+    let text = "Your telegram user id is *" + msg.from.id + "*"
+    if (msg.context.user) text += "\nYou are a *user*"
+    if (msg.context.admin) text += "\nYou are an *admin*"
+    if (msg.context.test) text += "\nYou are a *tester*"
+    reply.text(text, "Markdown")
+})
+
 
 bot.command('say', function(msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) {
