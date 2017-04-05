@@ -74,18 +74,9 @@ bot.command('save', function(msg, reply, next) {
 require('./topics')(bot)
 
 bot.command('ping', function(msg, reply, next) {
-    reply.text("/pong")
+    reply.text("pong")
 })
-bot.command('pong', function(msg, reply, next) {
-    let r = Math.random()
-    if (r < 1/3.) {
-        reply.text("HAHA! You lost!");
-    } else if (r < 2/3.) {
-        reply.text("You won... this time.")
-    } else {
-        reply.text('/ping')
-    }
-})
+
 
 bot.command('say', function(msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) return next()
