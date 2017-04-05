@@ -37,18 +37,22 @@ bot.all(function (msg, reply, next) {
     if (msg.from.username !== undefined) msg.context.displayName += " (" + msg.from.username + ")"
 
 
-    console.log(`${msg.context.displayName} (${msg.chat.id}): ${msg.text}`)
+    console.log(`${msg.context.displayName} (chat=${msg.chat.id}, from=${msg.from.id}): ${msg.text}`)
     next()
 })
 
 // authentication
 bot.all(function (msg, reply, next) {
-    if (msg.chat.id === config.admin_chat) // chat group of admins
-        msg.context.admin = true
-    if (msg.chat.id === config.user_chat)
-        msg.context.user = true
-    if (msg.chat.id === config.test_chat)
-        msg.context.test = true
+    const from = msg.from.id
+    const chat = msg.chat.id
+    if (config.admin_chats.indexOf(chat) >= 0) msg.context.admin = true
+    if (config.admin_users.indexOf(from) >= 0) msg.context.admin = true
+
+    if (config.user_chats.indexOf(chat) >= 0) msg.context.user = true
+    if (config.user_users.indexOf(from) >= 0) msg.context.user = true
+
+    if (config.test_chats.indexOf(chat) >= 0) msg.context.test = true
+    if (config.test_users.indexOf(from) >= 0) msg.context.test = true
 
     next()
 })
@@ -58,6 +62,7 @@ bot.command('quit', 'restart', 'update', 'reset', 'pull', function (msg, reply, 
     if (!msg.context.admin && !msg.context.test) return next()
 
     save();
+
     reply.text('Updating and restarting bot...').then((err, result) => {
         process.exit(0)
     })
@@ -79,7 +84,10 @@ bot.command('ping', function(msg, reply, next) {
 
 
 bot.command('say', function(msg, reply, next) {
-    if (!msg.context.admin && !msg.context.test) return next()
+    if (!msg.context.admin && !msg.context.test) {
+        reply.text("pos va a ser que no")
+        return next()
+    }
 
     bot.reply(config.user_chat).text(msg.args())
 })
