@@ -1,5 +1,9 @@
 const botgram = require('botgram')
 const config = require('./config')
+const shell = require('shelljs');
+
+
+
 const fs = require('fs')
 const bot = botgram(config.telegram_bot_token)
 
@@ -105,5 +109,8 @@ process.on('SIGINT', function() {
 
 
 
-bot.reply(config.test_chat).text("Bot online!")
-bot.reply(config.admin_chat).text("Bot online!")
+// get last commit
+const head = shell.exec('git rev-parse master').output.substr(7);
+const msg = "Bot online. Last commit: " + head;
+bot.reply(config.test_chat).text(msg)
+bot.reply(config.admin_chat).text(msg)
