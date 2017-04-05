@@ -110,7 +110,8 @@ process.on('SIGINT', function() {
 
 
 // get last commit
-const head = shell.exec('git rev-parse master').output.substr(7);
+const head = shell.exec('git rev-parse master', {silent:true}).stdout.trim().substr(0, 7);
+
 const msg = "Bot online. Last commit: " + head;
-bot.reply(config.test_chat).text(msg)
+//bot.reply(config.test_chat).text(msg)
 bot.reply(config.admin_chat).text(msg)
