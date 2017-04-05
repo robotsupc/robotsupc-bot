@@ -51,17 +51,13 @@ bot.all(function (msg, reply, next) {
 })
 
 
-bot.command('quit', function (msg, reply, next) {
-    if (!msg.context.admin) return next()
-
-    reply.text('Quitting bot in 3 seconds')
+bot.command('quit', 'restart', 'update', 'reset', 'pull', function (msg, reply, next) {
+    if (!msg.context.admin && !msg.context.test) return next()
 
     save();
-
-    setTimeout(function () {
-        console.log("Quitting bot on admin's request")
+    reply.text('Updating and restarting bot...').then((err, result) => {
         process.exit(0)
-    }, 3000)
+    })
 })
 
 
