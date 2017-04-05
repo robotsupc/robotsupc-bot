@@ -102,3 +102,8 @@ process.on('SIGINT', function() {
     console.log("Saved. Bye.")
     process.exit(0);
 });
+
+
+
+bot.reply(config.test_chat).text("Bot online!")
+bot.reply(config.admin_chat).text("Bot online!")
