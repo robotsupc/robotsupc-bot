@@ -104,8 +104,8 @@ module.exports = function (bot) {
 
         reply.text(topic + "\n" +
                 topics[topic].description + "\n\n" +
-                "Subscribers: " +
-                subs.map((x)=>x.firstname).join(", ")
+                "Subscribers (" + subs.length + "): " +
+                subs.map((x)=>x.firstname + (x.lastname !== undefined? " " + x.lastname : "")).join(", ")
         )
 
 
