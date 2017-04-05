@@ -1,10 +1,10 @@
 const botgram = require('botgram')
 const config = require('./config')
 const shell = require('shelljs');
-
-
-
 const fs = require('fs')
+
+
+
 const bot = botgram(config.telegram_bot_token)
 
 
@@ -31,7 +31,6 @@ bot.all(function (msg, reply, next) {
 
 // log
 bot.all(function (msg, reply, next) {
-    console.log("from:", JSON.stringify(msg.from))
     msg.context.displayName = ""
     if (msg.from.firstname !== undefined) msg.context.displayName += msg.from.firstname
     if (msg.from.lastname !== undefined) msg.context.displayName += " " + msg.from.lastname

@@ -3,7 +3,7 @@ module.exports = function (bot) {
     let topics = bot.store["topics"];
 
     bot.command('add', function (msg, reply, next) {
-        if (!msg.context.admin && !msg.context.test) next()
+        if (!msg.context.admin && !msg.context.test) return next()
 
         let args = msg.args(2)
         let topic = args[0]
