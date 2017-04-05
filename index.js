@@ -75,7 +75,7 @@ bot.command('save', function(msg, reply, next) {
 require('./topics')(bot)
 
 
-// catch all handler
+// catch all handler, only works when directly mentioned
 bot.command(function (msg, reply, next) {
     reply.text("Invalid command.");
 })
