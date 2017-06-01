@@ -1,8 +1,8 @@
 const botgram = require('botgram')
 const config = require('./config')
-const shell = require('shelljs');
+const shell = require('shelljs')
 const fs = require('fs')
-
+const request = require('request')
 
 
 const bot = botgram(config.telegram_bot_token)
@@ -61,7 +61,7 @@ bot.all(function (msg, reply, next) {
 bot.command('quit', 'restart', 'update', 'reset', 'pull', function (msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) return next()
 
-    save();
+    save()
 
     reply.text('Updating and restarting bot...').then((err, result) => {
         process.exit(0)
@@ -69,8 +69,7 @@ bot.command('quit', 'restart', 'update', 'reset', 'pull', function (msg, reply, 
 })
 
 
-
-bot.command('save', function(msg, reply, next) {
+bot.command('save', function (msg, reply, next) {
     if (!msg.context.admin) return next()
     save()
     reply.text("Saved!")
@@ -78,7 +77,7 @@ bot.command('save', function(msg, reply, next) {
 
 require('./topics')(bot)
 
-bot.command('ping', function(msg, reply, next) {
+bot.command('ping', function (msg, reply, next) {
     reply.text("pong")
 })
 
@@ -91,7 +90,7 @@ bot.command('id', function (msg, reply, next) {
 })
 
 
-bot.command('say', function(msg, reply, next) {
+bot.command('say', function (msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) {
         reply.text("pos va a ser que no")
         return next()
@@ -101,29 +100,86 @@ bot.command('say', function(msg, reply, next) {
 })
 
 
-// catch all handler, only works when directly mentioned
-bot.command(function (msg, reply, next) {
-    reply.text("Invalid command.");
+bot.command('ins', 'inscriptions', 'inscripciones', function (msg, reply, next) {
+    if (bot.store.numInscriptions === undefined) {
+        reply.text("No data, sorry")
+    }
+    reply.text("Inscribed to 3D course: " + bot.store.numInscriptions)
 })
 
+
+// catch all handler, only works when directly mentioned
+bot.command(function (msg, reply, next) {
+    reply.text("Invalid command.")
+})
 
 
 function save() {
     fs.writeFileSync(filename, JSON.stringify(bot.store))
 }
 
-process.on('SIGINT', function() {
-    console.log("Caught interrupt signal... saving");
-    save();
+process.on('SIGINT', function () {
+    console.log("Caught interrupt signal... saving")
+    save()
     console.log("Saved. Bye.")
-    process.exit(0);
-});
+    process.exit(0)
+})
+
+
+function setup() {
+
+    // get last commit
+    const head = shell.exec('git rev-parse master', {silent: true}).stdout.trim().substr(0, 7)
+
+    const msg = "Bot online. Last commit: " + head
+    bot.reply(config.test_chat).text(msg)
+    //bot.reply(config.admin_chat).text(msg)
+
+    bot.ticks = []
+
+    function addTick(fun, interval, immediate = true) {
+        bot.ticks.push({
+            "fun": fun,
+            "interval": interval,
+            "last": new Date().getTime()
+        })
+        if (immediate) fun()
+    }
+
+    addTick(inscriptions, 20*1000)
+
+
+    tick()
+}
+
+
+setup()
+
+function inscriptions() {
+    console.log("Getting inscriptions")
+    request('https://cursos.jediupc.com/api/courseInstances/inscriptions', function (error, response, body) {
+        const res = JSON.parse(response.body)
+        res.forEach(function(x) {
+            if (x._id === "592ae6fb041bcdab066c40b3") {
+                const old = bot.store.numInscriptions
+                const curr = x.inscribed
+                if (old !== curr) {
+                    bot.store.numInscriptions = curr
+                    bot.reply(config.test_chat).text("New inscription! Total inscriptions: "+curr)
+                }
+            }
+        })
+
+    });
+
+}
 
 
 
-// get last commit
-const head = shell.exec('git rev-parse master', {silent:true}).stdout.trim().substr(0, 7);
+function tick() {
+    bot.ticks.forEach(function(x) {
+        if (new Date().getTime() - x.last >= x.interval) x.fun()
+    })
 
-const msg = "Bot online. Last commit: " + head;
-bot.reply(config.test_chat).text(msg)
-//bot.reply(config.admin_chat).text(msg)
+    setTimeout(tick, 500)
+}

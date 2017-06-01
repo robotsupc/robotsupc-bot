@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "botgram": "git+https://github.com/jmendeth/node-botgram.git",
+    "request": "^2.81.0",
     "shelljs": "^0.7.7"
   },
   "bugs": {
