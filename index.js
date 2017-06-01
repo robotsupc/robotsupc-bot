@@ -103,8 +103,9 @@ bot.command('say', function (msg, reply, next) {
 bot.command('ins', 'inscriptions', 'inscripciones', function (msg, reply, next) {
     if (bot.store.numInscriptions === undefined) {
         reply.text("No data, sorry")
+        return
     }
-    reply.text("Inscribed to 3D course: " + bot.store.numInscriptions)
+    reply.text("Total inscriptions to 3D course: " + bot.store.numInscriptions)
 })
 
 
@@ -160,12 +161,13 @@ function inscriptions() {
     request('https://cursos.jediupc.com/api/courseInstances/inscriptions', function (error, response, body) {
         const res = JSON.parse(response.body)
         res.forEach(function (x) {
-            if (x._id === "592ae6fb041bcdab066c40b3") {
+            console.log("result:",x)
+            if (x._id === "592ae773041bcdab066c40b4") {
                 const old = bot.store.numInscriptions
                 const curr = x.inscribed
                 if (old !== curr) {
                     bot.store.numInscriptions = curr
-                    bot.reply(config.test_chat).text("New inscription! Total inscriptions: " + curr)
+                    bot.reply(config.admin_chat).text("New inscription! Total inscriptions: " + curr)
                 }
             }
         })
@@ -182,7 +184,10 @@ bot.on("error", (err) => {
 
 function tick() {
     bot.ticks.forEach(function (x) {
-        if (new Date().getTime() - x.last >= x.interval) x.fun()
+        if (new Date().getTime() - x.last >= x.interval) {
+            x.fun()
+            x.last = new Date().getTime()
+        }
     })
 
     setTimeout(tick, 500)
