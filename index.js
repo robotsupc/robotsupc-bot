@@ -146,7 +146,7 @@ function setup() {
         if (immediate) fun()
     }
 
-    addTick(inscriptions, 20*1000)
+    addTick(inscriptions, 20 * 1000)
 
 
     tick()
@@ -159,25 +159,29 @@ function inscriptions() {
     console.log("Getting inscriptions")
     request('https://cursos.jediupc.com/api/courseInstances/inscriptions', function (error, response, body) {
         const res = JSON.parse(response.body)
-        res.forEach(function(x) {
+        res.forEach(function (x) {
             if (x._id === "592ae6fb041bcdab066c40b3") {
                 const old = bot.store.numInscriptions
                 const curr = x.inscribed
                 if (old !== curr) {
                     bot.store.numInscriptions = curr
-                    bot.reply(config.test_chat).text("New inscription! Total inscriptions: "+curr)
+                    bot.reply(config.test_chat).text("New inscription! Total inscriptions: " + curr)
                 }
             }
         })
 
-    });
+    })
 
 }
 
 
+bot.on("error", (err) => {
+    bot.reply(config.test_chat).text("Error:\n" + err)
+})
+
 
 function tick() {
-    bot.ticks.forEach(function(x) {
+    bot.ticks.forEach(function (x) {
         if (new Date().getTime() - x.last >= x.interval) x.fun()
     })
 
