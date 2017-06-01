@@ -89,6 +89,15 @@ bot.command('id', function (msg, reply, next) {
     reply.text(text, "Markdown")
 })
 
+bot.command('drive', function (msg, reply, next) {
+    if (!msg.context.admin) {
+        reply.text("Must be admin")
+        return next()
+    }
+
+    bot.reply(config.admin_chat).text("https://goo.gl/D91B3Q")
+})
+
 
 bot.command('say', function (msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) {
@@ -155,6 +164,8 @@ function setup() {
 
 
 setup()
+
+
 
 function inscriptions() {
     console.log("Getting inscriptions")
