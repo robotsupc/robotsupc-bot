@@ -144,10 +144,11 @@ function setup() {
     const author = shell.exec('git log -1 --pretty=%aN', {silent: true}).stdout.trim()
     const email = shell.exec('git log -1 --pretty=%ae', {silent: true}).stdout.trim()
 
-    const msg = "Bot online. Last commit:\n" +
-        commit + ": " + shortlog + "\n" +
-        author + "<" + email + ">" + "\n"
-    bot.reply(config.test_chat).text(msg)
+    const url = 'https://github.com/robotsupc/robotsupc-bot/commit/' + commit
+    const msg = 'Bot online. Last commit: *' +
+        '['+commit+']'+'('+ url +')' + ': ' + shortlog + '*\n' +
+        author + ' <' + email + '>' + '\n'
+    bot.reply(config.test_chat).text(msg, 'Markdown')
     //bot.reply(config.admin_chat).text(msg)
 
     bot.ticks = []
