@@ -57,8 +57,14 @@ bot.all(function (msg, reply, next) {
     next()
 })
 
+bot.command('commit', function (msg, reply, next) {
+    if (!msg.context.admin && !msg.context.test) return next()
 
-bot.command('quit', 'restart', 'update', 'reset', 'pull', function (msg, reply, next) {
+    sendCommit(msg.chat.id)
+})
+
+
+bot.command('update', function (msg, reply, next) {
     if (!msg.context.admin && !msg.context.test) return next()
 
     save()
@@ -136,8 +142,7 @@ process.on('SIGINT', function () {
 })
 
 
-function setup() {
-
+function sendCommit(chat) {
     // get last commit
     const commit = shell.exec('git log -1 --pretty=%h', {silent: true}).stdout.trim().substr(0, 7)
     const shortlog = shell.exec('git log -1 --pretty=%B', {silent: true}).stdout.trim()
@@ -148,8 +153,11 @@ function setup() {
     const msg = 'Bot online. Last commit: ' +
         '['+commit+']'+'('+ url +')' + '\n*' + shortlog + '*\n\n' +
         'Author: ' + author + ' <' + email + '>' + '\n'
-    bot.reply(config.test_chat).disablePreview().text(msg, 'Markdown')
-    //bot.reply(config.admin_chat).text(msg)
+    bot.reply(chat).disablePreview().text(msg, 'Markdown')
+}
+
+function setup() {
+    sendCommit(config.test_chat);
 
     bot.ticks = []
 
