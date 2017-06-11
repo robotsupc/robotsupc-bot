@@ -145,8 +145,8 @@ function setup() {
     const email = shell.exec('git log -1 --pretty=%ae', {silent: true}).stdout.trim()
 
     const url = 'https://github.com/robotsupc/robotsupc-bot/commit/' + commit
-    const msg = 'Bot online. Last commit: *' +
-        '['+commit+']'+'('+ url +')' + ': ' + shortlog + '*\n' +
+    const msg = 'Bot online. Last commit: ' +
+        '['+commit+']'+'('+ url +')' + ': *' + shortlog + '*\n' +
         author + ' <' + email + '>' + '\n'
     bot.reply(config.test_chat).text(msg, 'Markdown')
     //bot.reply(config.admin_chat).text(msg)
