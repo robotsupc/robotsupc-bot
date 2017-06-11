@@ -150,7 +150,7 @@ function sendCommit(chat) {
     const email = shell.exec('git log -1 --pretty=%ae', {silent: true}).stdout.trim()
 
     const url = 'https://github.com/robotsupc/robotsupc-bot/commit/' + commit
-    const msg = 'Bot online. Last commit: ' +
+    const msg = 'Last commit: ' +
         '['+commit+']'+'('+ url +')' + '\n*' + shortlog + '*\n\n' +
         'Author: ' + author + ' <' + email + '>' + '\n'
     bot.reply(chat).disablePreview().text(msg, 'Markdown')
