@@ -170,19 +170,22 @@ setup()
 function inscriptions() {
     //console.log("Getting inscriptions")
     request('https://cursos.jediupc.com/api/courseInstances/inscriptions', function (error, response, body) {
-        const res = JSON.parse(response.body)
-        res.forEach(function (x) {
-            //console.log("result:",x)
-            if (x._id === "592ae773041bcdab066c40b4") {
-                const old = bot.store.numInscriptions
-                const curr = x.inscribed
-                if (old !== curr) {
-                    bot.store.numInscriptions = curr
-                    bot.reply(config.admin_chat).text("New inscription! Total inscriptions: " + curr)
+        try {
+            const res = JSON.parse(response.body)
+            res.forEach(function (x) {
+                //console.log("result:",x)
+                if (x._id === "592ae773041bcdab066c40b4") {
+                    const old = bot.store.numInscriptions
+                    const curr = x.inscribed
+                    if (old !== curr) {
+                        bot.store.numInscriptions = curr
+                        bot.reply(config.admin_chat).text("New inscription! Total inscriptions: " + curr)
+                    }
                 }
-            }
-        })
-
+            })
+        } catch(err) {
+            bot.reply(config.test_chat).text("Error with JEDI API:\n" + err)
+        }
     })
 
 }
