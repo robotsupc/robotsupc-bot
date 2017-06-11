@@ -139,9 +139,14 @@ process.on('SIGINT', function () {
 function setup() {
 
     // get last commit
-    const head = shell.exec('git rev-parse master', {silent: true}).stdout.trim().substr(0, 7)
+    const commit = shell.exec('git log -1 --pretty=%h', {silent: true}).stdout.trim().substr(0, 7)
+    const shortlog = shell.exec('git log -1 --pretty=%B', {silent: true}).stdout.trim()
+    const author = shell.exec('git log -1 --pretty=%aN', {silent: true}).stdout.trim()
+    const email = shell.exec('git log -1 --pretty=%ae', {silent: true}).stdout.trim()
 
-    const msg = "Bot online. Last commit: " + head
+    const msg = "Bot online. Last commit:\n" +
+        commit + ": " + shortlog + "\n" +
+        author + "<" + email + ">" + "\n"
     bot.reply(config.test_chat).text(msg)
     //bot.reply(config.admin_chat).text(msg)
 
@@ -166,7 +171,6 @@ function setup() {
 setup()
 
 
-
 function inscriptions() {
     //console.log("Getting inscriptions")
     request('https://cursos.jediupc.com/api/courseInstances/inscriptions', function (error, response, body) {
@@ -183,7 +187,7 @@ function inscriptions() {
                     }
                 }
             })
-        } catch(err) {
+        } catch (err) {
             bot.reply(config.test_chat).text("Error with JEDI API:\n" + err)
         }
     })
