@@ -146,9 +146,9 @@ function setup() {
 
     const url = 'https://github.com/robotsupc/robotsupc-bot/commit/' + commit
     const msg = 'Bot online. Last commit: ' +
-        '['+commit+']'+'('+ url +')' + ': *' + shortlog + '*\n' +
-        author + ' <' + email + '>' + '\n'
-    bot.reply(config.test_chat).text(msg, 'Markdown')
+        '['+commit+']'+'('+ url +')' + '\n*' + shortlog + '*\n\n' +
+        'Author: ' + author + ' <' + email + '>' + '\n'
+    bot.reply(config.test_chat).disablePreview().text(msg, 'Markdown')
     //bot.reply(config.admin_chat).text(msg)
 
     bot.ticks = []
